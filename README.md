@@ -77,3 +77,29 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+
+
+npx @react-native-community/cli@latest init PatientsApp
+
+npm i @react-native-vector-icons/fontawesome5
+npm install react-native-vector-icons
+npm install @react-navigation/native
+npm install react-native-screens react-native-safe-area-context
+npm install @react-navigation/material-bottom-tabs react-native-paper react-native-vector-icons
+npm install @react-navigation/native-stack
+npm install @react-navigation/bottom-tabs
+npm install redux
+npm install react-redux
+npm install axios
+npm i react-native-calendar-picker
+npm i @react-native-async-storage/async-storage
+npm install --save date-fns
+npm install date-fns
+npm i date-fns
+npm i react-native-date-picker
+
+
+
+ npx react-native run-android
