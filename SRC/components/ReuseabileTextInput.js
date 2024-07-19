@@ -1,13 +1,21 @@
 // components/ReuseableTextInput.js
-import React, { useState } from 'react';
-import { TextInput, HelperText, useTheme } from 'react-native-paper';
-import { View } from 'react-native';
-import styles from '../Styles/styles';
-
-const ReuseableTextInput = ({ label, placeholder, validate, errorMessage, onValueChange }) => {
-  const [value, setValue] = useState('');
+import React, { useState } from "react";
+import { TextInput, HelperText, useTheme } from "react-native-paper";
+import { View } from "react-native";
+import styles from "../Styles/styles";
+import colors from "../Styles/colors";
+const ReuseableTextInput = ({
+  label,
+  placeholder,
+  validate,
+  errorMessage,
+  onValueChange,
+  keyboardType = "default", 
+  secureTextEntry = false, 
+}) => {
+  const [value, setValue] = useState("");
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
-  const theme = useTheme(); // Access the theme
+  const theme = useTheme(); 
 
   const handleChange = (text) => {
     setValue(text);
@@ -24,11 +32,22 @@ const ReuseableTextInput = ({ label, placeholder, validate, errorMessage, onValu
         label={label}
         placeholder={placeholder}
         value={value}
-        style={[{ backgroundColor: theme.colors.surface }]}
+        style={[styles.textInput, { backgroundColor: theme.colors.surface }]}
         onChangeText={handleChange}
+        outlineColor={colors.primaryBlue}
+        activeOutlineColor={colors.federalBlue}
+        textColor={colors.black}
+        mode="outlined"
+        outlineStyle={styles.textInputRadius}
+        keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry} 
       />
       {showHelperText && (
-        <HelperText type="error" visible={showHelperText} style={{ color: theme.colors.error }}>
+        <HelperText
+          type="error"
+          visible={showHelperText}
+          style={{ color: colors.error}}
+        >
           {errorMessage}
         </HelperText>
       )}

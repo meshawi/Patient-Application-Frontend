@@ -1,7 +1,7 @@
 // LoginScreen.js
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ScrollView, Alert } from "react-native";
+import { ScrollView, Alert, Image, View } from "react-native";
 import {
   Text,
   Button,
@@ -69,14 +69,20 @@ const LoginScreen = () => {
         <ScrollView
           contentContainerStyle={[
             styles.container,
-            { backgroundColor: theme.colors.background },
           ]}
         >
-          <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
-            Login
+          <Image
+            source={require("../assets/LoginImage.png")}
+            style={[styles.Illustrations,{ marginBottom: 0 }]}
+          />
+          <View style={styles.centeredTextContainer}>
+          <Text style={[styles.heading1]}>
+            Welcome Back!
           </Text>
-          <Divider style={{ backgroundColor: theme.colors.placeholder }} />
-
+          <Text style={[styles.heading4]}>
+            Login to your account to continue.
+          </Text>
+          </View>
           {inputsArray.map((input, index) => (
             <React.Fragment key={index}>
               <ReuseableTextInput
@@ -87,18 +93,12 @@ const LoginScreen = () => {
                 onValueChange={(value) => handleInputChange(input.field, value)}
                 secureTextEntry={input.secureTextEntry}
               />
-              <Divider
-                style={{
-                  backgroundColor: theme.colors.placeholder,
-                  marginVertical: 10,
-                }}
-              />
             </React.Fragment>
           ))}
 
           <Button
             mode="contained"
-            style={{ backgroundColor: theme.colors.primary }}
+            style={styles.button}
             onPress={handleLogin}
           >
             Login

@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "SRC/assets/fonts/EduAUVICWANTHand-Bold.ttf",
+      "sha1": "c0d8a08c89119017ebfeb7dd1c34535a3d6b2aa2"
+    },
+    {
+      "path": "SRC/assets/fonts/EduAUVICWANTHand-Medium.ttf",
+      "sha1": "eb9c391e639de0f55aa03e13d48016e1b670d68b"
+    },
+    {
+      "path": "SRC/assets/fonts/EduAUVICWANTHand-Regular.ttf",
+      "sha1": "ec74584f2548aa4927967805d22cb1d762d1405a"
+    },
+    {
+      "path": "SRC/assets/fonts/EduAUVICWANTHand-SemiBold.ttf",
+      "sha1": "9164f56ec97c814b15afe7b1602e77dda2f01f9e"
+    }
+  ]
+}

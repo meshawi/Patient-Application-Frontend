@@ -1,15 +1,12 @@
 // screens/UserDetailsScreen.js
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import {
-  Text,
-  Divider,
-  Provider as PaperProvider,
-  useTheme,
-} from "react-native-paper";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Text, Provider as PaperProvider, useTheme } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
+import CustomCard from "../components/CustomCard";
 import styles from "../Styles/styles";
+
 const UserDetailsScreen = () => {
   const theme = useTheme();
   const user = useSelector((state) => state.auth);
@@ -28,28 +25,19 @@ const UserDetailsScreen = () => {
         <ScrollView
           contentContainerStyle={[
             styles.container,
-            { backgroundColor: theme.colors.background },
           ]}
         >
-          <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
+          <View style={styles.centeredTextContainer}>
+          <Text style={[styles.heading1, ]}>
             User Details
           </Text>
+          </View>
+          <Image
+            source={require("../assets/UserDetialsImage.png")}
+            style={[styles.Illustrations, { width: 200, height: 200 }]}
+          />
           {userDetails.map((detail, index) => (
-            <View key={index}>
-              <View
-                style={[
-                  styles.detailContainer,
-                  { backgroundColor: theme.colors.surface },
-                ]}
-              >
-                <Text style={[styles.title, { color: theme.colors.text }]}>
-                  {detail.label}:
-                </Text>
-                <Text style={[styles.value, { color: theme.colors.text }]}>
-                  {detail.value}
-                </Text>
-              </View>
-            </View>
+            <CustomCard key={index} label={detail.label} value={detail.value} />
           ))}
         </ScrollView>
       </SafeAreaProvider>

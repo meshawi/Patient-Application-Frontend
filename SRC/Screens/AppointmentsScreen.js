@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import {
   Text,
   Button,
@@ -14,6 +14,8 @@ import CalendarPicker from "react-native-calendar-picker";
 import dayjs from "dayjs";
 import styles from "../Styles/styles";
 import { useNavigation } from "@react-navigation/native";
+import CustomCard from "../components/CustomCard";
+import colors from "../Styles/colors";
 
 const AppointmentsScreen = () => {
   const route = useRoute();
@@ -90,15 +92,16 @@ const AppointmentsScreen = () => {
 
   return (
     <PaperProvider>
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          { backgroundColor: theme.colors.background },
-        ]}
-      >
-        <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
-          Select a Date
-        </Text>
+      <ScrollView contentContainerStyle={[styles.container]}>
+        <Image
+          source={require("../assets/CalendarImage.png")}
+          style={[styles.Illustrations, { width: 150, height: 150 }]}
+        />
+        <View style={styles.centeredTextContainer}>
+          <Text style={[styles.heading4]}>
+            Select a Date For The Appointment
+          </Text>
+        </View>
         <CalendarPicker
           onDateChange={handleDateChange}
           minDate={new Date()}
@@ -124,63 +127,53 @@ const AppointmentsScreen = () => {
             );
           }}
         />
-        <Divider
-          style={[
-            styles.divider,
-            { backgroundColor: theme.colors.textPrimary },
-          ]}
-        />
+
         {availableTimes.length > 0 && (
-          <View>
-            <Text style={[styles.title, { color: theme.colors.textSecondary }]}>
-              Available Times
+          <CustomCard>
+            <Text style={[styles.heading5, { fontWeight: "normal" }]}>
+              Available Times:
             </Text>
-            <View style={styles.cardsContainer}>
+            <View style={styles.twoRowsContainer}>
               {availableTimes.map((time, index) => (
-                <View style={styles.cardsWrapper} key={time.TimeID}>
-                  <Button
-                    mode="outlined"
+                <View style={styles.twoRowsWarpper} key={time.TimeID}>
+                  <CustomCard
+                    label="Time"
+                    value={time.TimeSlot}
                     onPress={() =>
                       setState((prevState) => ({
                         ...prevState,
                         selectedTime: time.TimeSlot,
                       }))
                     }
-                    style={{ borderColor: theme.colors.primary }}
-                  >
-                    <Text style={{ color: theme.colors.textPrimary }}>
-                      {time.TimeSlot}
-                    </Text>
-                  </Button>
+                  />
                 </View>
               ))}
             </View>
-          </View>
+          </CustomCard>
         )}
-        <Divider
-          style={[
-            styles.divider,
-            { backgroundColor: theme.colors.textPrimary },
-          ]}
-        />
         {selectedDate && selectedTime && (
           <View>
             <Button
               mode="outlined"
               style={{
-                borderColor: theme.colors.accent,
-                backgroundColor: theme.colors.background,
-                marginBottom: 10,
+                marginVertical: 10,
+                backgroundColor: colors.primaryBlue,
+                borderColor: colors.lighterPraimaryBlue,
               }}
             >
-              <Text style={[{ color: theme.colors.textPrimary }]}>
+              <Text
+                style={[
+                  styles.heading6,
+                  { fontWeight: "normal", color: colors.white },
+                ]}
+              >
                 Selected: {selectedDate.format("YYYY-MM-DD")} at {selectedTime}
               </Text>
             </Button>
             <Button
               mode="contained"
               onPress={bookAppointment}
-              style={[{ backgroundColor: theme.colors.primary }]}
+              style={styles.button}
             >
               Book Appointment
             </Button>

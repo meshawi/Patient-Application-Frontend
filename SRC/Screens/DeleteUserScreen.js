@@ -1,6 +1,6 @@
 // DeleteUserScreen.js
 import * as React from "react";
-import { ScrollView, Alert } from "react-native";
+import { ScrollView, Alert, Image, View } from "react-native";
 import {
   Text,
   Button,
@@ -68,20 +68,19 @@ const DeleteUserScreen = () => {
       <SafeAreaProvider>
         <ScrollView
           contentContainerStyle={[
-            styles.container,
-            { backgroundColor: theme.colors.background },
-          ]}
+            styles.container]}
         >
-          <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
+          <View style={styles.centeredTextContainer}>
+          <Text style={[styles.heading1]}>
             Delete Account
           </Text>
+          </View>
+          <Image source={require("../assets/DeleteImage.png")} style={styles.Illustrations} />
           <Text
-            variant="titleMedium"
-            style={[styles.title, { color: theme.colors.text }]}
-          >
+            style={[styles.heading4,{fontWeight: "normal",}]}
+            >
             Enter your Email and Password to delete your account
           </Text>
-          <Divider style={{ backgroundColor: theme.colors.placeholder }} />
 
           {inputsArray.map((input, index) => (
             <React.Fragment key={index}>
@@ -93,18 +92,12 @@ const DeleteUserScreen = () => {
                 onValueChange={(value) => handleInputChange(input.field, value)}
                 secureTextEntry={input.secureTextEntry}
               />
-              <Divider
-                style={{
-                  backgroundColor: theme.colors.placeholder,
-                  marginVertical: 10,
-                }}
-              />
             </React.Fragment>
           ))}
 
           <Button
             mode="contained"
-            style={{ backgroundColor: theme.colors.primary }}
+            style={styles.button}
             onPress={handleDelete}
           >
             Delete Account

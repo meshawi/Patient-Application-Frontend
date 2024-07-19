@@ -1,6 +1,6 @@
 // ForgetPasswordScreen.js
 import * as React from "react";
-import { ScrollView, Alert } from "react-native";
+import { ScrollView, Alert, Image, View } from "react-native";
 import {
   Text,
   Button,
@@ -88,20 +88,23 @@ const ForgetPasswordScreen = () => {
         <ScrollView
           contentContainerStyle={[
             styles.container,
-            { backgroundColor: theme.colors.background },
           ]}
         >
-          <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
+          <View style={styles.centeredTextContainer}>
+          <Text style={[styles.heading1]}>
             Password Reset
           </Text>
+          </View>
+          <Image
+            source={require("../assets/ResetPasswordImage.png")}
+            style={[styles.Illustrations, { width: 200, height: 200 }]}
+          />
           <Text
-            variant="titleMedium"
-            style={[styles.title, { color: theme.colors.text }]}
+            style={[styles.heading4,{fontWeight: "normal",}]}
           >
             Enter the Email and the Mobile number for validation and enter the
             new Password
           </Text>
-          <Divider style={{ backgroundColor: theme.colors.placeholder }} />
 
           {inputsArray.map((input, index) => (
             <React.Fragment key={index}>
@@ -114,18 +117,12 @@ const ForgetPasswordScreen = () => {
                 secureTextEntry={input.secureTextEntry}
                 keyboardType={input.keyboardType}
               />
-              <Divider
-                style={{
-                  backgroundColor: theme.colors.placeholder,
-                  marginVertical: 10,
-                }}
-              />
             </React.Fragment>
           ))}
 
           <Button
             mode="contained"
-            style={{ backgroundColor: theme.colors.primary }}
+            style={styles.button}
             onPress={handleUpdate}
           >
             Update Password

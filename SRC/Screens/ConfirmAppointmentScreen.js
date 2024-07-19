@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import {
   Text,
   Button,
@@ -13,6 +13,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { addAppointment } from "../redux/appointmentActions";
 import styles from "../Styles/styles";
+import CustomCard from "../components/CustomCard";
 
 const ConfirmAppointmentScreen = () => {
   const route = useRoute();
@@ -22,15 +23,15 @@ const ConfirmAppointmentScreen = () => {
     route.params;
   const [dialogVisible, setDialogVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState("");
-  const theme = useTheme(); // Access the theme
-
+  const theme = useTheme();
   const appointmentDetails = [
     { label: "Clinic", value: clinicName },
     { label: "Date", value: date },
     { label: "Time", value: time },
   ];
 
-  const confirmAppointment = () => {
+  const confirmAppointment = async () => {
+    console.log("Confirm button clicked");
     const requestBody = {
       clinicId,
       patientId,
@@ -40,29 +41,24 @@ const ConfirmAppointmentScreen = () => {
       status: "booked",
     };
 
-    axios
-      .post("http://192.168.0.169:8080/appointment", requestBody)
-      .then((response) => {
-        const newAppointment = {
-          AppointmentID: response.data.appointmentId,
-          ClinicName: clinicName,
-          Date: date,
-          TimeSlot: time,
-          DayOfWeek: response.data.dayOfWeek,
-          Status: "booked",
-        };
-        dispatch(addAppointment(newAppointment));
-        setDialogContent("Appointment booked successfully!");
-        setDialogVisible(true);
-      })
-      .catch((error) => {
-        console.error(
-          "Error booking appointment:",
-          error.response?.data || error.message
-        );
-        setDialogContent("Failed to book appointment.");
-        setDialogVisible(true);
-      });
+    try {
+      const response = await axios.post("http://192.168.0.169:8080/appointment", requestBody);
+      const newAppointment = {
+        AppointmentID: response.data.appointmentId,
+        ClinicName: clinicName,
+        Date: date,
+        TimeSlot: time,
+        DayOfWeek: response.data.dayOfWeek,
+        Status: "booked",
+      };
+      dispatch(addAppointment(newAppointment));
+      setDialogContent("Appointment booked successfully!");
+      setDialogVisible(true);
+    } catch (error) {
+      console.error("Error booking appointment:", error.response?.data || error.message);
+      setDialogContent("Failed to book appointment.");
+      setDialogVisible(true);
+    }
   };
 
   const hideDialog = () => {
@@ -74,50 +70,44 @@ const ConfirmAppointmentScreen = () => {
 
   return (
     <PaperProvider>
-      <View
-        style={[styles.container, { backgroundColor: theme.colors.background }]}
-      >
-        <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
-          Confirm Appointment
-        </Text>
-
-        {appointmentDetails.map((detail, index) => (
-          <View
-            key={index}
-            style={[
-              styles.detailContainer,
-              { backgroundColor: theme.colors.surface },
-            ]}
+      <ScrollView contentContainerStyle={[styles.container]}>
+        <View style={styles.centeredTextContainer}>
+          <Text style={[styles.heading4, { marginBottom: 0 }]}>
+            Confirm Appointment
+          </Text>
+          <Text
+            style={[styles.heading5, { fontWeight: "normal", marginBottom: 0 }]}
           >
-            <Text style={[styles.title, { color: theme.colors.text }]}>
-              {detail.label}:
-            </Text>
-            <Text style={[styles.value, { color: theme.colors.text }]}>
-              {detail.value}
-            </Text>
-          </View>
+            Please review the details below and confirm your appointment
+          </Text>
+        </View>
+        <Image
+          source={require("../assets/ConfirmImage.png")}
+          style={[styles.Illustrations, { marginBottom: 0 }]}
+        />
+        {appointmentDetails.map((detail, index) => (
+          <CustomCard key={index}>
+            <Text style={[styles.heading5]}>{detail.label}:</Text>
+            <Text style={[styles.heading6]}>{detail.value}</Text>
+          </CustomCard>
         ))}
 
         <Button
           mode="contained"
           onPress={confirmAppointment}
-          style={[{ backgroundColor: theme.colors.primary, marginBottom: 10 }]}
+          style={[styles.button, { marginBottom: 10 }]}
         >
           Confirm
         </Button>
         <Button
-          mode="outlined"
+          mode="contained"
           onPress={() => navigation.goBack()}
-          style={[
-            { borderColor: theme.colors.accent, color: theme.colors.primary },
-          ]}
+          style={[styles.button, { marginBottom: 10 }]}
         >
-          <Text style={{ color: theme.colors.textPrimary }}>Cancel</Text>
+          Cancel
         </Button>
-
         <Portal>
           <Dialog visible={dialogVisible} onDismiss={hideDialog}>
-            <Dialog.Title>Appointment Status</Dialog.Title>
             <Dialog.Content>
               <Text>{dialogContent}</Text>
             </Dialog.Content>
@@ -126,7 +116,7 @@ const ConfirmAppointmentScreen = () => {
             </Dialog.Actions>
           </Dialog>
         </Portal>
-      </View>
+      </ScrollView>
     </PaperProvider>
   );
 };

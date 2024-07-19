@@ -1,23 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import {
   Text,
-  Divider,
   Provider as PaperProvider,
   Card,
   useTheme,
+  Button,
+  Modal,
+  Portal,
+  Avatar,
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "../Styles/styles";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import ReuseabileTextInput from "../components/ReuseabileTextInput";
+import { fetchAppointments } from "../redux/appointmentActions";
+import ClosestAppointment from "../components/ClosestAppointment";
+import CustomDivider from "../components/CustomDivider";
 
 const WelcomeScreen = () => {
+  const dispatch = useDispatch();
   const authState = useSelector((state) => state.auth);
+  const { appointments, loading, error } = useSelector(
+    (state) => state.appointments
+  );
   const [clinics, setClinics] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedClinic, setSelectedClinic] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  const theme = useTheme(); // Access the theme
+  const theme = useTheme();
 
   useEffect(() => {
     axios
@@ -33,6 +47,7 @@ const WelcomeScreen = () => {
               Description: item.Description,
               StartTime: item.StartTime,
               EndTime: item.EndTime,
+              Icon: item.icon, // Updated to use icon from response
             });
             uniqueClinics.push({
               ClinicID: item.ClinicID,
@@ -48,10 +63,39 @@ const WelcomeScreen = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (authState.id) {
+      dispatch(fetchAppointments(authState.id));
+    }
+  }, [dispatch, authState.id]);
+
   const handleClinicPress = (clinic) => {
-    console.log("Clinic pressed: ", clinic);
+    setSelectedClinic(clinic);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    setSelectedClinic(null);
+  };
+
+  const handleBookAppointment = (clinic) => {
+    setModalVisible(false);
     navigation.navigate("Appointments", { clinicId: clinic.ClinicID });
   };
+
+  const getClosestAppointment = (appointments) => {
+    const now = new Date();
+    return appointments
+      .filter((appointment) => new Date(appointment.Date) >= now)
+      .sort((a, b) => new Date(a.Date) - new Date(b.Date))[0];
+  };
+
+  const closestAppointment = getClosestAppointment(appointments);
+
+  const filteredClinics = clinics.filter((clinic) =>
+    clinic.ClinicName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <PaperProvider>
@@ -62,46 +106,112 @@ const WelcomeScreen = () => {
             { backgroundColor: theme.colors.background },
           ]}
         >
-          <Text style={[styles.header, { color: theme.colors.textPrimary ,marginTop: 50,
-          }]}>
-            Welcome {authState.firstname} {authState.lastname}!
-          </Text>
-          <Divider
+          <Image
+            source={require("../assets/WelcomeImage.png")}
             style={[
-              styles.divider,
-              { backgroundColor: theme.colors.placeholder },
+              styles.Illustrations,
+              { width: 200, height: 200, marginBottom: 0 },
             ]}
           />
-          {clinics.map((clinic, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleClinicPress(clinic)}
-            >
-              <Card
-                style={[styles.card, { backgroundColor: theme.colors.surface }]}
+          <ReuseabileTextInput
+            label="Search Clinic"
+            placeholder="Enter clinic name"
+            validate={() => true}
+            errorMessage=""
+            onValueChange={setSearchQuery}
+          />
+          <View style={[styles.centeredTextContainer, { marginTop: 7 }]}>
+            <Text style={styles.heading3}>My Next Appointment</Text>
+          </View>
+          {loading ? (
+            <Text>Loading your next appointment details, please wait...</Text>
+          ) : error ? (
+            <Text>
+              Sorry, there was an error loading your appointment: {error}
+            </Text>
+          ) : closestAppointment ? (
+            <ClosestAppointment
+              closestAppointment={closestAppointment}
+              authState={authState}
+            />
+          ) : (
+            <Text>
+              You have no upcoming appointments. To schedule a new appointment,
+              please visit our appointments page or contact your preferred
+              clinic.
+            </Text>
+          )}
+          <CustomDivider />
+          <Text style={[styles.heading3, { fontWeight: "normal" }]}>
+            Clinics:
+          </Text>
+
+          <View style={styles.twoRowsContainer}>
+            {filteredClinics.map((clinic, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleClinicPress(clinic)}
+                style={styles.twoRowsWarpper}
               >
-                <Card.Content>
-                  <Text
-                    style={[styles.clinicName, { color: theme.colors.primary }]}
+                <Card>
+                  <Card.Content
+                    style={{
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
-                    {clinic.ClinicName}
-                  </Text>
-                  <Text
-                    style={[styles.description, { color: theme.colors.text }]}
-                  >
-                    {clinic.Description}
-                  </Text>
-                  <Text
-                    style={[styles.times, { color: theme.colors.placeholder }]}
-                  >
-                    {clinic.StartTime} - {clinic.EndTime}
-                  </Text>
-                </Card.Content>
-              </Card>
-            </TouchableOpacity>
-          ))}
+                    <Avatar.Icon
+                      size={48}
+                      icon={clinic.Icon} 
+                    />
+                    <Text
+                      style={[
+                        styles.heading6,
+                        { fontWeight: "normal" , marginTop: 8 },
+                      ]}
+                    >
+                      {clinic.ClinicName}
+                    </Text>
+                  </Card.Content>
+                </Card>
+              </TouchableOpacity>
+            ))}
+          </View>
         </ScrollView>
       </SafeAreaProvider>
+      <Portal>
+        <Modal
+          visible={modalVisible}
+          onDismiss={handleModalClose}
+          contentContainerStyle={[
+            styles.modualContainer]}
+        >
+          {selectedClinic && (
+            <>
+              <Text style={styles.heading5}>
+                {selectedClinic.ClinicName} Clinic
+              </Text>
+              <Text style={[styles.heading6,{fontWeight:"normal"}]}>{selectedClinic.Description}</Text>
+              <Text style={[styles.heading6,{fontWeight:"normal"}]}>
+                Start Time: {selectedClinic.StartTime}
+              </Text>
+              <Text style={[styles.heading6,{fontWeight:"normal"}]}>
+                End Time: {selectedClinic.EndTime}
+              </Text>
+              <Button onPress={handleModalClose} style={{ marginTop: 10 }}>
+                Close
+              </Button>
+              <Button
+                onPress={() => handleBookAppointment(selectedClinic)}
+                style={{ marginTop: 10 }}
+              >
+                Book Appointment
+              </Button>
+            </>
+          )}
+        </Modal>
+      </Portal>
     </PaperProvider>
   );
 };

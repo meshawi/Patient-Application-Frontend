@@ -1,6 +1,6 @@
 // screens/MyAccountScreen.js
 import * as React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, Image } from "react-native";
 import { Text, Button, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
@@ -36,20 +36,20 @@ const MyAccountScreen = () => {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        { backgroundColor: theme.colors.background },
       ]}
     >
-      <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
+      <View style={styles.centeredTextContainer}>
+      <Text style={[styles.heading1]}>
         My Account
       </Text>
-      <View style={styles.cardsContainer}>
+      </View>
+      <View style={styles.twoRowsContainer}>
         {buttons.map((button, index) => (
-          <View style={styles.inputWrapper} key={index}>
+          <View style={styles.twoRowsWarpper} key={index}>
             <Button
               mode="contained"
               style={[
                 styles.button,
-                { backgroundColor: theme.colors.onSurface },
               ]}
               onPress={button.action}
             >
@@ -58,6 +58,10 @@ const MyAccountScreen = () => {
           </View>
         ))}
       </View>
+      <Image
+        source={require("../assets/AccountImage.png")}
+        style={styles.Illustrations}
+      />
     </ScrollView>
   );
 };

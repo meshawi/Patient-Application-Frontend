@@ -1,23 +1,19 @@
-// screens/MyAppointmentsScreen.js
 import React, { useEffect } from "react";
-import { ScrollView, View } from "react-native";
-import {
-  Text,
-  Card,
-  Divider,
-  Provider as PaperProvider,
-  useTheme,
-} from "react-native-paper";
+import { Image, ScrollView, View } from "react-native";
+import { Text, PaperProvider, useTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAppointments } from "../redux/appointmentActions";
 import styles from "../Styles/styles";
+import AppointmentCard from "../components/AppointmentCard";
+import CustomDivider from "../components/CustomDivider";
+import ClosestAppointment from "../components/ClosestAppointment";
 
 const MyAppointmentsScreen = () => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.id);
-  const { appointments, loading, error } = useSelector(
-    (state) => state.appointments
-  );
+  const authState = useSelector((state) => state.auth);
+
+  const { appointments, loading, error } = useSelector((state) => state.appointments);
   const theme = useTheme(); // Access the theme
 
   useEffect(() => {
@@ -26,55 +22,51 @@ const MyAppointmentsScreen = () => {
     }
   }, [dispatch, userId]);
 
+  const getClosestAppointment = (appointments) => {
+    const now = new Date();
+    return appointments
+      .filter((appointment) => new Date(appointment.Date) >= now)
+      .sort((a, b) => new Date(a.Date) - new Date(b.Date))[0];
+  };
+
+  const closestAppointment = getClosestAppointment(appointments);
+
+  const sortedAppointments = [...appointments].sort(
+    (a, b) => new Date(b.Date) - new Date(a.Date)
+  );
+
   return (
     <PaperProvider>
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          { backgroundColor: theme.colors.background },
-        ]}
-      >
-        <Text style={[styles.header, { color: theme.colors.textPrimary }]}>
-          My Appointments
-        </Text>
-        <View style={styles.cardsContainer}>
-          {loading ? (
-            <Text style={{ color: theme.colors.text }}>Loading...</Text>
-          ) : error ? (
-            <Text style={{ color: theme.colors.error }}>Error: {error}</Text>
-          ) : (
-            appointments.map((appointment) => (
-              <Card
-                key={appointment.AppointmentID}
-                style={[
-                  styles.cardsWrapper,
-                  { backgroundColor: theme.colors.surface },
-                ]}
-              >
-                <Card.Content>
-                  <Text style={[styles.title, { color: theme.colors.primary }]}>
-                    {appointment.ClinicName}
-                  </Text>
-                  <Divider
-                    style={{ backgroundColor: theme.colors.placeholder }}
-                  />
-                  <Text style={{ color: theme.colors.text }}>
-                    Date: {new Date(appointment.Date).toLocaleDateString()}
-                  </Text>
-                  <Text style={{ color: theme.colors.text }}>
-                    Time: {appointment.TimeSlot}
-                  </Text>
-                  <Text style={{ color: theme.colors.text }}>
-                    Day: {appointment.DayOfWeek}
-                  </Text>
-                  <Text style={{ color: theme.colors.text }}>
-                    Status: {appointment.Status}
-                  </Text>
-                </Card.Content>
-              </Card>
-            ))
-          )}
+      <ScrollView contentContainerStyle={[styles.container]}>
+        <Image
+          source={require("../assets/ReminderImage.png")}
+          style={[styles.Illustrations, { width: 200, height: 200 }]}
+        />
+        <View style={styles.centeredTextContainer}>
+          <Text style={styles.heading3}>My Next Appointment</Text>
+          <View>
+            {loading ? (
+              <Text>Loading...</Text>
+            ) : error ? (
+              <Text>Error: {error}</Text>
+            ) : closestAppointment ? (
+              <ClosestAppointment closestAppointment={closestAppointment} authState={authState} />
+            ) : (
+              <Text>No upcoming appointments</Text>
+            )}
+          </View>
         </View>
+        <CustomDivider />
+        <Text style={styles.heading4}>All Appointments:</Text>
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : error ? (
+          <Text>Error: {error}</Text>
+        ) : (
+          sortedAppointments.map((appointment) => (
+            <AppointmentCard key={appointment.AppointmentID} appointment={appointment} />
+          ))
+        )}
       </ScrollView>
     </PaperProvider>
   );

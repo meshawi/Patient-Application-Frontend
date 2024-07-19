@@ -1,7 +1,11 @@
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider as ReduxProvider, useDispatch, useSelector } from 'react-redux';
 import store from './SRC/redux/store';
 import React, { useEffect } from 'react';
-import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import { configureFonts, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RegisterScreen from './SRC/Screens/RegisterScreen';
 import LoginScreen from './SRC/Screens/LoginScreen';
 import ForgetPasswordScreen from './SRC/Screens/ForgetPasswordScreen';
@@ -12,37 +16,108 @@ import ConfirmAppointmentScreen from './SRC/Screens/ConfirmAppointmentScreen';
 import MyAccountScreen from './SRC/Screens/MyAccountScreen';
 import UserDetailsScreen from './SRC/Screens/UserDetailsScreen';
 import MyAppointmentsScreen from './SRC/Screens/MyAppointmentsScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { initializeAuth } from './SRC/redux/authActions';
+import { Platform } from 'react-native';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+const fontConfig = {
+  web: {
+    regular: {
+      fontFamily: 'EduAUVICWANTHand-Regular',
+      fontWeight: 'normal',
+    },
+    medium: {
+      fontFamily: 'EduAUVICWANTHand-Medium',
+      fontWeight: 'normal',
+    },
+    light: {
+      fontFamily: 'EduAUVICWANTHand-Regular',
+      fontWeight: 'normal',
+    },
+    thin: {
+      fontFamily: 'EduAUVICWANTHand-Bold',
+      fontWeight: 'normal',
+    },
+    labelMedium: {
+      fontFamily: 'EduAUVICWANTHand-Medium',
+      fontWeight: 'normal',
+    },
+  },
+  ios: {
+    regular: {
+      fontFamily: 'EduAUVICWANTHand-Regular',
+      fontWeight: 'normal',
+    },
+    medium: {
+      fontFamily: 'EduAUVICWANTHand-Medium',
+      fontWeight: 'normal',
+    },
+    light: {
+      fontFamily: 'EduAUVICWANTHand-Regular',
+      fontWeight: 'normal',
+    },
+    thin: {
+      fontFamily: 'EduAUVICWANTHand-Bold',
+      fontWeight: 'normal',
+    },
+    labelMedium: {
+      fontFamily: 'EduAUVICWANTHand-Medium',
+      fontWeight: 'normal',
+    },
+  },
+  android: {
+    regular: {
+      fontFamily: 'EduAUVICWANTHand-Regular',
+      fontWeight: 'normal',
+    },
+    medium: {
+      fontFamily: 'EduAUVICWANTHand-Medium',
+      fontWeight: 'normal',
+    },
+    light: {
+      fontFamily: 'EduAUVICWANTHand-Regular',
+      fontWeight: 'normal',
+    },
+    thin: {
+      fontFamily: 'EduAUVICWANTHand-Bold',
+      fontWeight: 'normal',
+    },
+    labelMedium: {
+      fontFamily: 'EduAUVICWANTHand-Medium',
+      fontWeight: 'normal',
+    },
+  },
+  "default": {
+  "fontFamily": "EduAUVICWANTHand-Medium",
+  "fontWeight": "400",
+  "letterSpacing": 0,
+},
+};
+
 const theme = {
-  ...DefaultTheme,
+  ...MD3LightTheme,
+  fonts: configureFonts({ config: fontConfig }),
   colors: {
-    ...DefaultTheme.colors,
+    ...MD3LightTheme.colors,
     primary: 'tomato',
     secondary: 'yellow',
     background: '#e6e6e6',
     surface: '#ffffff',
     accent: '#03dac4',
     error: '#B00020',
-    text: '#333333', // Darker for better readability
-    onSurface: '#333333', // Match text color for consistency
+    text: '#333333',
+    onSurface: '#333333',
     disabled: '#f6f6f6',
     placeholder: '#a1a1a1',
     backdrop: '#f6f6f6',
-    textPrimary: '#333333', // Consistent with main text
-    textGSecondary: '#555555', // Slightly darker for better readability
-    textHint: '#777777', // Slightly darker for better readability
-    textDisabled: '#999999', // Slightly darker for better readability
+    textPrimary: '#333333',
+    textGSecondary: '#555555',
+    textHint: '#777777',
+    textDisabled: '#999999',
     textInverse: '#ffffff',
   },
-  
   roundness: 4,
   animation: {
     scale: 1.0,
@@ -73,7 +148,7 @@ const AuthTabs = () => (
     />
     <Tab.Screen
       name="MyAccount"
-      component={MyAccountScreen} // New Screen for My Account
+      component={MyAccountScreen}
       options={{
         tabBarLabel: 'My Account',
         tabBarIcon: ({ color }) => <FontAwesome5 name="user" size={20} color={color} />,
@@ -81,7 +156,6 @@ const AuthTabs = () => (
     />
   </Tab.Navigator>
 );
-
 
 const GuestTabs = () => (
   <Tab.Navigator
@@ -131,7 +205,6 @@ const MainApp = () => {
             <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} />
             <Stack.Screen name="DeleteUser" component={DeleteUserScreen} />
             <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
-
           </>
         ) : (
           <Stack.Screen
@@ -145,13 +218,12 @@ const MainApp = () => {
   );
 };
 
-
 export default function Main() {
   return (
-    <Provider store={store}>
+    <ReduxProvider store={store}>
       <PaperProvider theme={theme}>
         <MainApp />
       </PaperProvider>
-    </Provider>
+    </ReduxProvider>
   );
 }

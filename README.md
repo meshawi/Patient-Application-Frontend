@@ -99,7 +99,7 @@ npm install --save date-fns
 npm install date-fns
 npm i date-fns
 npm i react-native-date-picker
-
+npm i lottie-react-native
 
 
  npx react-native run-android
