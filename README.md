@@ -1,105 +1,99 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Patient Application - Frontend
 
-# Getting Started
+A simple patient management application created as part of a diploma program training with King Faisal Hospital and Research Center. This project allows users to manage their appointments, view account details, and perform other essential tasks. Built using **React Native** with **Redux** for state management and connects to a backend using **Express** and **SQL** (via PHPMyAdmin) for data handling.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [Future Enhancements](#future-enhancements)
+- [Acknowledgements](#acknowledgements)
 
-## Step 1: Start the Metro Server
+---
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Features
+- User authentication (login, registration, password reset)
+- Appointment booking and management
+- Viewing and updating user account details
+- Persistent state management with Redux
+- Intuitive, user-friendly interface with custom styling
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Tech Stack
+- **Frontend Framework**: React Native
+- **State Management**: Redux
+- **Backend**: Express (see backend README)
+- **Database**: SQL (via PHPMyAdmin, using XAMPP)
 
-```bash
-# using npm
-npm start
+## Project Structure
 
-# OR using Yarn
-yarn start
+```
+src
+├── assets                     # Static assets like images and fonts
+├── components                 # Reusable components
+├── redux                      # Redux actions, reducers, and store
+├── Screens                    # Screens for different app functionalities
+├── Styles                     # App-wide styling files
+└── validations                # Form validation logic
+
 ```
 
-## Step 2: Start your Application
+### Main Files and Directories
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- **assets**: Contains images and fonts used throughout the app.
+- **components**: Includes reusable components such as `AppointmentCard.js`, `CustomCard.js`, and `ReuseableTextInput.js` to standardize UI elements across screens.
+- **redux**: Contains Redux-related files, including actions (`appointmentActions.js`, `authActions.js`), reducers (`appointmentReducer.js`, `authReducer.js`), and the Redux store configuration (`store.js`).
+- **Screens**: Houses the main screens such as `LoginScreen.js`, `MyAccountScreen.js`, and `AppointmentsScreen.js` that represent different features of the application.
+- **Styles**: Contains custom styling files, including color definitions (`colors.js`) and shared style objects (`styles.js`).
+- **validations**: Holds validation logic to ensure input correctness and security across forms.
 
-### For Android
+## Setup Instructions
 
-```bash
-# using npm
-npm run android
+### Prerequisites
+- **Node.js** (version >= 12)
+- **npm** or **yarn**
+- **XAMPP** (for SQL database)
+- **React Native CLI** (for running on Android/iOS)
+- **Backend API**: The frontend requires a running backend server. [Visit the backend repository here]() for setup instructions.
 
-# OR using Yarn
-yarn android
-```
+### Steps
 
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+1. **Clone the repository**:
 
 
+2. **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
+3. **Link assets** (if required for fonts/images):
+    ```bash
+    npx react-native link
+    ```
 
-npx @react-native-community/cli@latest init PatientsApp
+4. **Run the Backend**:
+    Follow the instructions in the [backend repository]() to set up and run the backend server. Ensure the backend server is running and accessible before starting the frontend.
 
-npm i @react-native-vector-icons/fontawesome5
-npm install react-native-vector-icons
-npm install @react-navigation/native
-npm install react-native-screens react-native-safe-area-context
-npm install @react-navigation/material-bottom-tabs react-native-paper react-native-vector-icons
-npm install @react-navigation/native-stack
-npm install @react-navigation/bottom-tabs
-npm install redux
-npm install react-redux
-npm install axios
-npm i react-native-calendar-picker
-npm i @react-native-async-storage/async-storage
-npm install --save date-fns
-npm install date-fns
-npm i date-fns
-npm i react-native-date-picker
-npm i lottie-react-native
+5. **Run the app**:
+    ```bash
+    npx react-native run-android  # For Android
+    npx react-native run-ios      # For iOS
+    ```
 
+## Usage
 
- npx react-native run-android
+Once the app is running:
+- **Login/Register**: Access account features with authentication.
+- **Manage Appointments**: View, create, and delete appointments.
+- **Profile Management**: Update personal details within the app.
+- **Notifications**: Receive reminders and notifications for appointments.
+
+## Future Enhancements
+- **Push Notifications**: Implement real-time notifications for appointment reminders.
+- **Enhanced UI**: Improve styling and add animations for a more responsive feel.
+- **Additional Validations**: Increase validation checks for input fields.
+- **Multi-language Support**: Add support for multiple languages.
+
+## Acknowledgements
+This project was developed as part of my college diploma program during my training at King Faisal Hospital and Research Center.
