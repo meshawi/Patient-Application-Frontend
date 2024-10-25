@@ -10,6 +10,7 @@ A simple patient management application created as part of a diploma program tra
 - [Usage](#usage)
 - [Future Enhancements](#future-enhancements)
 - [Acknowledgements](#acknowledgements)
+- [Screenshots](#screenshots)
 
 ---
 
@@ -73,7 +74,7 @@ src
     ```
 
 4. **Run the Backend**:
-    Follow the instructions in the [backend repository]() to set up and run the backend server. Ensure the backend server is running and accessible before starting the frontend.
+    Follow the instructions in the [backend repository](https://github.com/meshawi/Patient-Application-Backend.git) to set up and run the backend server. Ensure the backend server is running and accessible before starting the frontend.
 
 5. **Run the app**:
     ```bash
@@ -95,5 +96,22 @@ Once the app is running:
 - **Additional Validations**: Increase validation checks for input fields.
 - **Multi-language Support**: Add support for multiple languages.
 
+## Screenshots
+
+<div align="center">
+
+<div style="display: inline-block; margin: 10px;">
+    <h4>1. Home Screen</h4>
+    <img src="ScreenShots/home.png" alt="Home Screen" width="300"/>
+</div>
+
+<div style="display: inline-block; margin: 10px;">
+    <h4>2. Register</h4>
+    <img src="ScreenShots/Register.png" alt="Register Screen" width="300"/>
+</div>
+
+</div>
+
 ## Acknowledgements
 This project was developed as part of my college diploma program during my training at King Faisal Hospital and Research Center.
+
